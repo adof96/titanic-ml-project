@@ -1,3 +1,4 @@
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -68,5 +69,31 @@ def plot_correlation_heatmap(df):
     )
 
     plt.title('Correlation Heatmap')
+
+    plt.show()
+
+def plot_feature_importance(model, X):
+
+    importance = model.feature_importances_
+
+    feature_names = X.columns
+
+    importance_df = pd.DataFrame({
+        'Feature': feature_names,
+        'Importance': importance
+    })
+
+    importance_df = importance_df.sort_values(
+        by='Importance',
+        ascending=False
+    )
+
+    sns.barplot(
+        data=importance_df,
+        x='Importance',
+        y='Feature'
+    )
+
+    plt.title('Feature Importance')
 
     plt.show()
