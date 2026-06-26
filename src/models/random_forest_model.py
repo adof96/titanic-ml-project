@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score
 def entrenar_random_forest(df):
 
     # Features
-    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize']]
+    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize', 'IsAlone', 'Title']]
 
     # Target
     y = df['Survived']
