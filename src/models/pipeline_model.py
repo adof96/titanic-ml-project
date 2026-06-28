@@ -15,27 +15,26 @@ from sklearn.impute import SimpleImputer
 
 from sklearn.linear_model import LogisticRegression
 
-from sklearn.metrics import accuracy_score
-
 def entrenar_pipeline(df):
 
     # Features
-    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize']]
-
+    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize', 'IsAlone', 'Title']]
     # Target
     y = df['Survived']
 
 # Columnas numéricas
     numeric_features = [
-        'Age',
-        'Fare',
-        'FamilySize'
-    ]
+        "Pclass",
+        "Age",
+        "Fare",
+        "FamilySize",
+        "IsAlone"
+    ]   
 
-    # Columnas categóricas
+# Columnas categóricas
     categorical_features = [
-        'Sex',
-        'Pclass'
+        "Sex",
+        "Title"
     ]
 
     numeric_transformer = Pipeline(steps=[
@@ -85,9 +84,5 @@ def entrenar_pipeline(df):
     model.fit(X_train, y_train)
 
     predictions = model.predict(X_test)
-
-    accuracy = accuracy_score(y_test, predictions)
-
-    print('Pipeline Accuracy:', accuracy)
 
     return model, y_test, predictions

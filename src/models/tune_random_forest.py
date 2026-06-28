@@ -9,15 +9,7 @@ from sklearn.model_selection import (
 from sklearn.ensemble import RandomForestClassifier
 
 def optimizar_random_forest(df):
-    X = df[
-        [
-            'Pclass',
-            'Sex',
-            'Age',
-            'Fare',
-            'FamilySize'
-        ]
-    ]
+    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize', 'IsAlone', 'Title']]
 
     y = df['Survived']
 
