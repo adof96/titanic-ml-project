@@ -14,13 +14,14 @@ from sklearn.preprocessing import (
 from sklearn.impute import SimpleImputer
 
 from sklearn.linear_model import LogisticRegression
+from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE
 
 def entrenar_pipeline(df):
 
     # Features
-    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize', 'IsAlone', 'Title']]
+    X = df[FEATURES]
     # Target
-    y = df['Survived']
+    y = df[TARGET]
 
 # Columnas numéricas
     numeric_features = [
@@ -76,9 +77,9 @@ def entrenar_pipeline(df):
         X,
         y,
 
-        test_size=0.2,
+        test_size=TEST_SIZE,
 
-        random_state=42
+        random_state= RANDOM_STATE
     )
 
     model.fit(X_train, y_train)

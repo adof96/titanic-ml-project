@@ -3,15 +3,15 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-
+from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE
 
 def entrenar_modelo(df):
 
     # Features
-    X = df[['Pclass', 'Sex', 'Age', 'Fare', 'FamilySize', 'IsAlone', 'Title']]
+    X = df[FEATURES]
 
     # Target
-    y = df['Survived']
+    y = df[TARGET]
 
     # Convertir categorías a números
     X = pd.get_dummies(X, drop_first=True)
@@ -20,8 +20,8 @@ def entrenar_modelo(df):
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
-        test_size=0.2,
-        random_state=42
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE
     )
 
     # Crear modelo
