@@ -34,3 +34,5 @@ LOGISTIC_MODEL_PATH = "models/logistic.pkl"
 RANDOM_FOREST_MODEL_PATH = "models/random_forest.pkl"
 
 PIPELINE_MODEL_PATH = "models/pipeline.pkl"
+
+PRODUCTION_MODEL_PATH = "models/production_model.pkl"
