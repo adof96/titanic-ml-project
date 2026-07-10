@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import joblib
 
 
-def guardar_modelo(modelo, ruta):
+def guardar_modelo(modelo, ruta: Path):
     """
     Guarda un modelo entrenado en disco.
 
@@ -10,22 +12,24 @@ def guardar_modelo(modelo, ruta):
     modelo : object
         Modelo entrenado.
 
-    ruta : str
+    ruta : Path
         Ruta donde se guardará el modelo.
     """
+
+    ruta.parent.mkdir(parents=True, exist_ok=True)
 
     joblib.dump(modelo, ruta)
 
     print(f"Modelo guardado en: {ruta}")
 
 
-def cargar_modelo(ruta):
+def cargar_modelo(ruta: Path):
     """
     Carga un modelo previamente guardado.
 
     Parameters
     ----------
-    ruta : str
+    ruta : Path
         Ruta del modelo.
 
     Returns
