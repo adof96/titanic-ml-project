@@ -14,7 +14,7 @@ from sklearn.preprocessing import (
 from sklearn.impute import SimpleImputer
 
 from sklearn.linear_model import LogisticRegression
-from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE
+from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE , MAX_ITER
 
 def entrenar_pipeline(df):
 
@@ -68,7 +68,7 @@ def entrenar_pipeline(df):
 
         ('preprocessor', preprocessor),
 
-        ('classifier', LogisticRegression(max_iter=1000))
+        ('classifier', LogisticRegression(max_iter= MAX_ITER))
 
     ])
 

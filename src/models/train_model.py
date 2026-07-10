@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE
+from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE , MAX_ITER
 
 def entrenar_modelo(df):
 
@@ -25,7 +25,7 @@ def entrenar_modelo(df):
     )
 
     # Crear modelo
-    model = LogisticRegression(max_iter=1000)
+    model = LogisticRegression(max_iter = MAX_ITER)
 
     # Entrenar
     model.fit(X_train, y_train)
