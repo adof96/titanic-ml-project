@@ -49,6 +49,13 @@ CATEGORICAL_FEATURES = [
         "Title"
 ]
 
+COMMON_TITLES = [
+    "Mr",
+    "Mrs",
+    "Miss",
+    "Master"
+]
+
 # ==========================
 # Train/Test
 # ==========================
