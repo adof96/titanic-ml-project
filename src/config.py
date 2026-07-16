@@ -36,6 +36,19 @@ FEATURES = [
     "Title"
 ]
 
+NUMERIC_FEATURES = [
+        "Pclass",
+        "Age",
+        "Fare",
+        "FamilySize",
+        "IsAlone"
+]
+
+CATEGORICAL_FEATURES = [
+        "Sex",
+        "Title"
+]
+
 # ==========================
 # Train/Test
 # ==========================

@@ -12,7 +12,7 @@ from sklearn.preprocessing import (
 )
 
 from sklearn.impute import SimpleImputer
-from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE , MAX_ITER
+from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE , NUMERIC_FEATURES, CATEGORICAL_FEATURES
 
 def entrenar_pipeline(df, classifier):
 
@@ -22,19 +22,10 @@ def entrenar_pipeline(df, classifier):
     y = df[TARGET]
 
 # Columnas numéricas
-    numeric_features = [
-        "Pclass",
-        "Age",
-        "Fare",
-        "FamilySize",
-        "IsAlone"
-    ]   
+    numeric_features = NUMERIC_FEATURES
 
 # Columnas categóricas
-    categorical_features = [
-        "Sex",
-        "Title"
-    ]
+    categorical_features = CATEGORICAL_FEATURES
 
     numeric_transformer = Pipeline(steps=[
 
@@ -85,4 +76,4 @@ def entrenar_pipeline(df, classifier):
 
     predictions = model.predict(X_test)
 
-    return model, y_test, predictions
+    return model, X_test, y_test, predictions
