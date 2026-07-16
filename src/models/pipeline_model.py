@@ -12,11 +12,9 @@ from sklearn.preprocessing import (
 )
 
 from sklearn.impute import SimpleImputer
-
-from sklearn.linear_model import LogisticRegression
 from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE , MAX_ITER
 
-def entrenar_pipeline(df):
+def entrenar_pipeline(df, classifier):
 
     # Features
     X = df[FEATURES]
@@ -64,11 +62,12 @@ def entrenar_pipeline(df):
 
         ]
     )
+
     model = Pipeline(steps=[
 
         ('preprocessor', preprocessor),
 
-        ('classifier', LogisticRegression(max_iter= MAX_ITER))
+        ('classifier', classifier)
 
     ])
 
