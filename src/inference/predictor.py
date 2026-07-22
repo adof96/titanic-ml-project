@@ -1,10 +1,6 @@
 import pandas as pd
 from config import FEATURES
-from features.build_features import (
-    agregar_tamano_familia,
-    agregar_is_alone,
-    agregar_title
-)
+from features.build_features import construir_features
 
 
 def predecir_pasajero(
@@ -41,11 +37,7 @@ def predecir_pasajero(
 
     # ===== Feature Engineering =====
 
-    nuevo_pasajero = agregar_tamano_familia(nuevo_pasajero)
-
-    nuevo_pasajero = agregar_is_alone(nuevo_pasajero)
-
-    nuevo_pasajero = agregar_title(nuevo_pasajero)
+    nuevo_pasajero = construir_features(nuevo_pasajero)
 
     # Mantener únicamente las variables que espera el modelo
 
@@ -55,4 +47,10 @@ def predecir_pasajero(
 
     probabilidades = modelo.predict_proba(nuevo_pasajero)[0]
 
-    return prediccion, probabilidades
+    resultado = {
+    "prediction": prediccion,
+    "prob_not_survival": probabilidades[0],
+    "prob_survival": probabilidades[1]
+}
+
+    return resultado
