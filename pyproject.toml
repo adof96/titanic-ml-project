@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mi_proyecto_titanic"
+version = "0.1.0"
+description = "Proyecto de Machine Learning Engineering basado en el dataset Titanic."
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["src"]

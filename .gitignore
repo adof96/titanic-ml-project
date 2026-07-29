@@ -1,18 +1,40 @@
-# Virtual environment
+# =====================================
+# Virtual Environment
+# =====================================
+
 .venv/
 
-# Python cache
-__pycache__/
+# =====================================
+# Python
+# =====================================
 
-# Jupyter Notebook checkpoints
+__pycache__/
+*.py[cod]
+*.pyo
+
+# =====================================
+# Packaging
+# =====================================
+
+*.egg-info/
+build/
+dist/
+
+# =====================================
+# Jupyter
+# =====================================
+
 .ipynb_checkpoints/
 
-# VS Code settings
+# =====================================
+# VS Code
+# =====================================
+
 .vscode/
 
-# Compiled Python files
-*.pyc
+# =====================================
+# Operating System
+# =====================================
 
-# OS files
 .DS_Store
 Thumbs.db
