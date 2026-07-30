@@ -45,3 +45,92 @@ st.write(
 )
 
 st.success("✅ Modelo cargado correctamente.")
+
+# ============================
+# Formulario
+# ============================
+
+st.header("Información del pasajero")
+
+name = st.text_input(
+    "Nombre",
+    placeholder="Ej. John Smith"
+)
+
+pclass = st.selectbox(
+    "Clase del pasajero",
+    options=[1, 2, 3],
+    format_func=lambda x: {
+        1: "🥇 Primera clase",
+        2: "🥈 Segunda clase",
+        3: "🥉 Tercera clase"
+    }[x]
+)
+
+# Explicación de la clase seleccionada
+
+if pclass == 1:
+    st.info(
+        "🏛️ **Primera clase**\n\n"
+        "La opción más exclusiva del Titanic. "
+        "Podría compararse con viajar hoy en una experiencia premium "
+        "o clase ejecutiva, con acceso a los mejores camarotes y servicios."
+    )
+
+elif pclass == 2:
+    st.info(
+        "💼 **Segunda clase**\n\n"
+        "Una opción cómoda para profesionales y familias de clase media. "
+        "Ofrecía buenas instalaciones, aunque con menos lujos que la primera clase."
+    )
+
+else:
+    st.info(
+        "🧳 **Tercera clase**\n\n"
+        "La alternativa más económica. "
+        "Era utilizada principalmente por inmigrantes y trabajadores que "
+        "viajaban en busca de nuevas oportunidades."
+    )
+
+sex = st.selectbox(
+    "Sexo",
+    options=["male", "female"],
+    format_func=lambda x: {
+        "male": "Hombre",
+        "female": "Mujer"
+    }[x]
+)
+
+age = st.number_input(
+    "Edad",
+    min_value=0.0,
+    value=30.0,
+    step=1.0
+)
+
+fare = st.number_input(
+    "Precio del boleto (£)",
+    min_value=0.0,
+    value=30.0,
+    step=1.0,
+    help=(
+        "Costo del boleto pagado por el pasajero para viajar en el Titanic. "
+        "El valor está expresado en libras esterlinas (£) de la época."
+    )
+)
+
+sibsp = st.number_input(
+    "Hermanos o cónyuge a bordo",
+    min_value=0,
+    value=0,
+    step=1,
+    help="Número de hermanos(as) o cónyuge que viajaban junto al pasajero."
+)
+
+parch = st.number_input(
+    "Padres o hijos a bordo",
+    min_value=0,
+    value=0,
+    step=1,
+    help="Número de padres o hijos que viajaban junto al pasajero."
+)
