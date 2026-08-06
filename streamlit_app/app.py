@@ -6,6 +6,7 @@ import streamlit as st
 
 from src.models.model_io import cargar_modelo
 from src.config import PRODUCTION_MODEL_PATH
+from src.inference.predictor import predecir_pasajero
 
 # ============================
 # Configuración
@@ -134,3 +135,37 @@ parch = st.number_input(
     step=1,
     help="Número de padres o hijos que viajaban junto al pasajero."
 )
+
+# ... campos del formulario ...
+
+if st.button("🔍 Realizar predicción"):
+
+    resultado = predecir_pasajero(
+        name=name,
+        pclass=pclass,
+        sex=sex,
+        age=age,
+        fare=fare,
+        sibsp=sibsp,
+        parch=parch,
+        modelo=modelo
+    )
+
+    if resultado["prediction"] == 1:
+        st.success(
+            "🎉 El modelo predice que el pasajero probablemente sobreviviría."
+        )
+    else:
+        st.error(
+            "⚠️ El modelo predice que el pasajero probablemente no sobreviviría."
+        )
+
+    st.write("### Probabilidades")
+
+    st.write(
+        f"✅ Supervivencia: {resultado['prob_survival']:.2%}"
+    )
+
+    st.write(
+        f"❌ No supervivencia: {resultado['prob_not_survival']:.2%}"
+    )

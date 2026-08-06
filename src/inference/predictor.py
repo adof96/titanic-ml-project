@@ -1,6 +1,6 @@
 import pandas as pd
-from config import FEATURES
-from features.build_features import construir_features
+from src.config import FEATURES
+from src.features.build_features import construir_features
 
 
 def predecir_pasajero(

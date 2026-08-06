@@ -1,4 +1,4 @@
-from config import COMMON_TITLES
+from src.config import COMMON_TITLES
 
 def agregar_tamano_familia(df):
     """
