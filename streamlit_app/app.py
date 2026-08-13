@@ -8,6 +8,7 @@ from src.models.model_io import cargar_modelo
 from src.config import PRODUCTION_MODEL_PATH
 from src.inference.predictor import predecir_pasajero
 from src.presentation.prediction_view import mostrar_resultado
+from src.validation.validate_input import validar_datos
 # ============================
 # Configuracións
 # ============================
@@ -136,33 +137,48 @@ parch = st.number_input(
     help="Número de padres o hijos que viajaban junto al pasajero."
 )
 
-# ... campos del formulario ...
+# ... Logica de prediccion ...
 
 if st.button("🔍 Realizar predicción"):
 
-    try:
+    # 1. Validar los datos recolectados del formulario
+    errores = validar_datos(
+        name=name,
+        pclass=pclass,
+        sex=sex,
+        age=age,
+        fare=fare,
+        sibsp=sibsp,
+        parch=parch
+    )
 
-        with st.spinner("Realizando predicción..."):
+    # 2. Si hay errores, los mostramos y frenamos la ejecución
+    if errores:
+        st.warning("⚠️ Por favor, corrige los siguientes errores antes de continuar:")
+        for error in errores:
+            st.error(error)
+            
+    # 3. Si todo está correcto, ejecutamos la inferencia de manera segura
+    else:
+        try:
+            with st.spinner("Realizando predicción..."):
+                resultado = predecir_pasajero(
+                    name=name,
+                    pclass=pclass,
+                    sex=sex,
+                    age=age,
+                    fare=fare,
+                    sibsp=sibsp,
+                    parch=parch,
+                    modelo=modelo
+                )
 
-            resultado = predecir_pasajero(
-                name=name,
-                pclass=pclass,
-                sex=sex,
-                age=age,
-                fare=fare,
-                sibsp=sibsp,
-                parch=parch,
-                modelo=modelo
+            # Invocación de la vista aislada para mostrar los datos procesados
+            mostrar_resultado(resultado)
+
+        except Exception as e:
+            st.error(
+                "Ha ocurrido un error inesperado durante la predicción."
             )
-
-        # Invocación de la vista aislada para mostrar los datos procesados
-        mostrar_resultado(resultado)
-
-    except Exception as e:
-
-        st.error(
-            "Ha ocurrido un error inesperado durante la predicción."
-        )
-
-        st.exception(e)
+            st.exception(e)
 
