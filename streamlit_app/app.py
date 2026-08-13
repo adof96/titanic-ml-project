@@ -7,9 +7,9 @@ import streamlit as st
 from src.models.model_io import cargar_modelo
 from src.config import PRODUCTION_MODEL_PATH
 from src.inference.predictor import predecir_pasajero
-
+from src.presentation.prediction_view import mostrar_resultado
 # ============================
-# Configuración
+# Configuracións
 # ============================
 
 st.set_page_config(
@@ -155,44 +155,8 @@ if st.button("🔍 Realizar predicción"):
                 modelo=modelo
             )
 
-        # Mostrar el resultado principal
-        if resultado["prediction"] == 1:
-            st.success(
-                "🎉 El modelo predice que el pasajero probablemente sobreviviría."
-            )
-        else:
-            st.error(
-                "⚠️ El modelo predice que el pasajero probablemente no sobreviviría."
-            )
-
-        # Mostrar las probabilidades
-        st.subheader("Resultados de la predicción")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.metric(
-                label="✅ Probabilidad de supervivencia",
-                value=f"{resultado['prob_survival']:.2%}"
-            )
-
-        with col2:
-            st.metric(
-                label="❌ Probabilidad de no supervivencia",
-                value=f"{resultado['prob_not_survival']:.2%}"
-            )
-
-        # Barra de progreso
-        st.write("Probabilidad de supervivencia")
-
-        st.progress(resultado["prob_survival"])
-
-        # Explicación para el usuario
-        st.caption(
-            "La probabilidad representa la confianza del modelo en su predicción. "
-            "No garantiza que el evento ocurra, sino la estimación realizada por el modelo "
-            "a partir de los patrones aprendidos durante el entrenamiento."
-        )
+        # Invocación de la vista aislada para mostrar los datos procesados
+        mostrar_resultado(resultado)
 
     except Exception as e:
 
@@ -201,3 +165,4 @@ if st.button("🔍 Realizar predicción"):
         )
 
         st.exception(e)
+
