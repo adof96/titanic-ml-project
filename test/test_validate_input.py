@@ -98,3 +98,22 @@ def test_limites_de_validacion(campo, valor, debe_ser_valido):
         assert errores == []
     else:
         assert len(errores) > 0
+
+def test_validar_datos_detecta_multiples_errores():
+
+    # Arrange
+    datos = {
+        "name": "",
+        "pclass": 4,
+        "sex": "unknown",
+        "age": 0,
+        "fare": -10,
+        "sibsp": -1,
+        "parch": -1
+    }
+
+    # Act
+    errores = validar_datos(**datos)
+
+    # Assert
+    assert len(errores) == 7
