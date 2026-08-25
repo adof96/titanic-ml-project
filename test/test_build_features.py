@@ -4,7 +4,8 @@ import pytest
 from src.features.build_features import (
     agregar_tamano_familia,
     agregar_is_alone,
-    agregar_title
+    agregar_title,
+    construir_features
 )
 
 
@@ -67,3 +68,23 @@ def test_agregar_title(name, expected_title):
 
     # Assert
     assert resultado["Title"].iloc[0] == expected_title
+
+def test_construir_features_integra_todas_las_transformaciones():
+
+    # Arrange
+    df = pd.DataFrame({
+        "Name": [
+            "Smith, Mr. John",
+            "Brown, Miss. Anna"
+        ],
+        "SibSp": [1, 0],
+        "Parch": [2, 0]
+    })
+
+    # Act
+    resultado = construir_features(df)
+
+    # Assert
+    assert list(resultado["FamilySize"]) == [4, 1]
+    assert list(resultado["IsAlone"]) == [0, 1]
+    assert list(resultado["Title"]) == ["Mr", "Miss"]
