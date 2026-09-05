@@ -38,3 +38,10 @@ dist/
 
 .DS_Store
 Thumbs.db
+
+# =====================================
+# Testing / Coverage
+# =====================================
+.coverage
+htmlcov/
+.pytest_cache/
