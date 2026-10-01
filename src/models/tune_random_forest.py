@@ -1,72 +1,114 @@
-import pandas as pd
-
-from sklearn.model_selection import (
-    train_test_split,
-    GridSearchCV
-)
-
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from config import FEATURES, TARGET, TEST_SIZE, RANDOM_STATE
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
+
+from config import (
+    FEATURES,
+    TARGET,
+    TEST_SIZE,
+    RANDOM_STATE,
+    NUMERIC_FEATURES,
+    CATEGORICAL_FEATURES
+)
 
 
 def optimizar_random_forest(df):
     """
-    Ajusta hiperparametros de un RandomForest usando GridSearchCV.
+    Optimiza un RandomForest utilizando GridSearchCV
+    sobre un Pipeline completo de preprocessing + modelo.
 
-    IMPORTANTE: a diferencia de `entrenar_pipeline` (pipeline_model.py),
-    esta funcion NO usa un ColumnTransformer/OneHotEncoder dentro de un
-    Pipeline. Aqui la codificacion de variables categoricas se hace de
-    forma manual con pd.get_dummies ANTES del split, por lo que el
-    X_test que retorna ya viene con columnas dummy (ej. 'Sex_male',
-    'Title_Mr', 'Title_Mrs', 'Title_Rare') en vez de las columnas
-    originales 'Sex' y 'Title'.
+    El Pipeline se encarga de:
+    - Imputar valores numéricos
+    - Escalar variables numéricas
+    - Imputar variables categóricas
+    - Codificar variables categóricas
+    - Entrenar el RandomForest
 
-    Por eso el modelo que retorna esta funcion (grid_search.best_estimator_)
-    y su X_test/y_test SOLO son compatibles entre si. NO deben mezclarse
-    con el `pipeline_model` ni con el `X_test`/`y_test` de
-    `entrenar_pipeline`, ni asignarse a variables con el mismo nombre en
-    el notebook, porque eso sobrescribe los datos "crudos" que el
-    Pipeline completo necesita para predecir.
+    GridSearchCV optimiza únicamente los hiperparámetros
+    del RandomForest dentro del Pipeline.
     """
 
     X = df[FEATURES]
     y = df[TARGET]
 
-    # Codificacion manual de categoricas (Sex, Title -> dummies)
-    X_encoded = pd.get_dummies(
-        X,
-        drop_first=True
+    # ==========================================
+    # Preprocesamiento
+    # ==========================================
+
+    numeric_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler())
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("onehot", OneHotEncoder(drop="first"))
+    ])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", numeric_transformer, NUMERIC_FEATURES),
+            ("cat", categorical_transformer, CATEGORICAL_FEATURES)
+        ]
     )
 
-    X_train_encoded, X_test_encoded, y_train, y_test = train_test_split(
-        X_encoded,
-        y,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_STATE
-    )
+    # ==========================================
+    # Modelo
+    # ==========================================
 
     rf = RandomForestClassifier(
         random_state=RANDOM_STATE
     )
 
+    model_pipeline = Pipeline(steps=[
+        ("preprocessor", preprocessor),
+        ("classifier", rf)
+    ])
+
+    # ==========================================
+    # Train / Test Split
+    # ==========================================
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE
+    )
+
+    # ==========================================
+    # Hiperparámetros
+    # ==========================================
+
     param_grid = {
-        'n_estimators': [50, 100, 200],
-        'max_depth': [3, 5, 10, None],
-        'min_samples_split': [2, 5, 10]
+        "classifier__n_estimators": [50, 100, 200],
+        "classifier__max_depth": [3, 5, 10, None],
+        "classifier__min_samples_split": [2, 5, 10]
     }
 
+    # ==========================================
+    # GridSearch
+    # ==========================================
+
     grid_search = GridSearchCV(
-        estimator=rf,
+        estimator=model_pipeline,
         param_grid=param_grid,
         cv=5,
-        scoring='accuracy',
+        scoring="accuracy",
         n_jobs=-1
     )
 
     grid_search.fit(
-        X_train_encoded,
+        X_train,
         y_train
     )
+
+    # ==========================================
+    # Resultados
+    # ==========================================
 
     print("Best Parameters:")
     print(grid_search.best_params_)
@@ -76,6 +118,6 @@ def optimizar_random_forest(df):
 
     return (
         grid_search.best_estimator_,
-        X_test_encoded,
+        X_test,
         y_test
     )
